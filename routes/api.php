@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\UserLoginController;
 use App\Http\Controllers\Api\V1\UserRegisterController;
@@ -28,6 +29,12 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('register-form', [UserRegisterController::class, 'registerForm']);
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
+
+
+
+        Route::get('payment-list', [PaymentController::class, 'list']);
+
+
     });
 
 });
