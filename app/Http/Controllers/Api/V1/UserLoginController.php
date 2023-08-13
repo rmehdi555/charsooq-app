@@ -38,10 +38,7 @@ class UserLoginController extends Controller
         if (!$otpValidation)
             return $this->errorResponse(__('messages.auth_failed_otp'));
 
-        $user = User::whereIsBanned(false)->find($user_id);
-
-        if (!filled($user))
-            return $this->errorResponse(__('messages.auth_banned'), 403);
+        $user = User::find($user_id);
 
         return $this->successResponse([
             'user_id' => $user_id,
