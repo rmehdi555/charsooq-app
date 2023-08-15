@@ -54,7 +54,7 @@ class RahyabService
      * @return string, return status
      */
     public function send($number, $message, $recId = null)
-    {
+    {       
         try {
             $client = new SoapClient($this->baseUrl, $this->option);
             $parameters = [

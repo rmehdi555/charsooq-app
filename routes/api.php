@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\TicketController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\UserLoginController;
 use App\Http\Controllers\Api\V1\UserRegisterController;
@@ -33,6 +34,9 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
 
         Route::get('payment-list', [PaymentController::class, 'list']);
+        Route::get('ticket-list', [TicketController::class, 'list']);
+        Route::post('filter-ticket', [TicketController::class, 'filter']);
+        Route::post('new-ticket', [TicketController::class, 'new']);
 
 
     });
