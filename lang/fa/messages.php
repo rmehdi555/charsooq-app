@@ -25,5 +25,7 @@ return [
     'success_otp_send' => 'کد چهار رقمی با موفقیت ارسال شد.',
     'success_otp_validate' => 'احراز هویت با موفقیت انجام شد.',
     'error_user_not_validated' => 'برای دسترسی حتما احراز هویت کنید.',
+    'url_entered_invalid' => 'لینک وارد شده غیر معتبر می باشد',
+    'url_entered_invalid_amazon' => 'لینک وارد شده مربوط به سایت امازونِ آمریکا نمی باشد'
 
 ];

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Register;
-
+namespace App\Http\Requests\V1\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-
-class RegisterFromRequest extends FormRequest
+class PaymentListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +24,8 @@ class RegisterFromRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'nationalcode' => 'required|size:10',
-            'email' => 'required|email',
+            'invoices_code' => 'nullable|integer',
+            'date' => 'nullable|date',
         ];
     }
 }

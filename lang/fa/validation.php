@@ -197,5 +197,6 @@ return [
         'family' => 'نام خانوادگی',
         'status' => 'وضعیت',
         'cell_number' => 'تلفن',
+        'invoices_code' => 'کد پیگیری'
     ],
 ];

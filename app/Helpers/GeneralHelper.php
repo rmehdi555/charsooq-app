@@ -56,3 +56,54 @@ if (!function_exists('generateTransferCode')) {
         return mt_rand($intMin, $intMax);
     }
 }
+
+if (!function_exists('extractRegionAndExchangeType')) {
+    function extractRegionAndExchangeType($link)
+    {
+        $urlDetail = ['region' => 1, 'exchangeType' => 1];
+
+        if (strpos($link, 'co.uk'))
+            $urlDetail = ['region' => 3, 'exchangeType' => 2];
+        elseif (strpos($link, '.fr'))
+            $urlDetail = ['region' => 3, 'exchangeType' => 4];
+        elseif (strpos($link, '.de'))
+            $urlDetail = ['region' => 3, 'exchangeType' => 4];
+        elseif (strpos($link, '.ae'))
+            $urlDetail = ['region' => 2, 'exchangeType' => 3];
+        elseif (strpos($link, '.tr'))
+            $urlDetail = ['region' => 4, 'exchangeType' => 6];
+        elseif (strpos($link, '.ca'))
+            $urlDetail = ['region' => 1, 'exchangeType' => 5];
+
+        return $urlDetail;
+    }
+}
+
+if (!function_exists('truncate')) {
+    function truncate($input, $maxWords, $maxChars)
+    {
+        $words = preg_split('/\s+/', $input);
+        $words = array_slice($words, 0, $maxWords);
+        $words = array_reverse($words);
+
+        $chars = 0;
+        $truncated = array();
+
+        while (count($words) > 0) {
+            $fragment = trim(array_pop($words));
+            $chars += strlen($fragment);
+
+            if ($chars > $maxChars) break;
+
+            $truncated[] = $fragment;
+        }
+
+        $result = implode(' ', $truncated);
+        if ($input == $result) {
+            $ret = $input;
+        } else {
+            $ret = $result . '...';
+        }
+        return $ret;
+    }
+}
