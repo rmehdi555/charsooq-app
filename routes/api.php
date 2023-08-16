@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\V1\BasketAmazonController;
+use App\Http\Controllers\Api\V1\AmazonProductController;
 use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\UserLoginController;
 use App\Http\Controllers\Api\V1\UserRegisterController;
@@ -31,8 +32,9 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
         Route::post('payment-list', [PaymentController::class, 'list']);
+        Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
 
-        Route::post('amazon-link', [BasketAmazonController::class, 'link']);
+        Route::post('amazon-url', [AmazonProductController::class, 'url']);
 
 
 

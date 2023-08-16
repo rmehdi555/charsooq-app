@@ -107,3 +107,15 @@ if (!function_exists('truncate')) {
         return $ret;
     }
 }
+
+
+if (!function_exists('extractAsinAmazon')) {
+    function extractAsinAmazon($url)
+    {
+        $pattern = '/(dp\/)([A-Z0-9]{10})/';
+        preg_match($pattern, $url, $matches);
+        if (isset($matches[2]))
+            return $matches[2];
+        return false;
+    }
+}
