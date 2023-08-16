@@ -18,7 +18,7 @@ class TicketLog extends Model
         'status_id',
         'ip',
         'agent_id',
-        'attachment_id',
+        'file_id',
         'department_id',
     ];
 
