@@ -22,9 +22,9 @@ class TicketListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required | max:50',
-            'department_id' => 'required | nullable',
-            'content' => 'required',
+            'title' => 'nullable | max:50',
+            'department_id' => 'nullable | nullable',
+            'content' => 'nullable',
         ];
     }
 }

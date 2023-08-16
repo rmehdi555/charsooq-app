@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\V1\Register\TicketListRequest;
+use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketLog;
-use App\Models\Transaction;
+use App\Models\TicketStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -15,25 +16,27 @@ use App\Http\Resources\TicketListResource;
 class TicketController extends Controller
 {
 
-    public function list(): JsonResponse
+    public function list(TicketListRequest $request): JsonResponse
     {
 
         $ticket = Ticket::where('user_id', Auth::id())
+            ->when(
+                isset($request->title),
+                fn($q) => $q->where('tickets.title', 'Like', '%' . $request->title . '%')
+            )
+            ->when(
+                isset($request->date),
+                fn($q) => $q->where('tickets.created_at', '=', $request->date )
+            )
+            ->when(
+                isset($request->status),
+                fn($q) => $q->where('tickets.status_id', '=', $request->status )
+            )
             ->latest()
             ->paginate(config('custom.paginate_count'));
+        $status=TicketStatus::select('id','name')->get();
         $data = TicketListResource::collection($ticket);
-        return $this->successResponse($data , '');
-    }
-
-    public function filter($request):JsonResponse
-    {
-        $ticket = Ticket::where('user_id', Auth::id())
-            ->where('title',$request->title)
-            ->where('created_at',$request->created_at)
-            ->where('status_id',$request->status_id)
-            ->latest()
-        ->paginate(config('custom.paginate_count'));
-        $data = TicketListResource::collection($ticket);
+        $data->put('status',$status);
         return $this->successResponse($data , '');
     }
 

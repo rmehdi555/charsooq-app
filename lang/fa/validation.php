@@ -197,7 +197,9 @@ return [
         'family' => 'نام خانوادگی',
         'status' => 'وضعیت',
         'cell_number' => 'تلفن',
+
         'department_id'=>'نوع درخواست',
+        'invoices_code' => 'کد پیگیری'
 
     ],
 ];

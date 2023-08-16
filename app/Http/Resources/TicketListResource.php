@@ -20,6 +20,7 @@ class TicketListResource extends JsonResource
             'status_id' => $this->ticketStatus->name,
             'created_at' => $this->created_at,
             'department_id' => $this->department->name
+
         ];
     }
 }

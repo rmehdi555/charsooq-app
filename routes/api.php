@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\BasketAmazonController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\TicketController;
 use App\Http\Controllers\Api\V1\ProfileController;
@@ -30,12 +31,14 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('register-form', [UserRegisterController::class, 'registerForm']);
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
+        Route::post('payment-list', [PaymentController::class, 'list']);
 
-
-
+        Route::post('amazon-link', [BasketAmazonController::class, 'link']);
         Route::get('payment-list', [PaymentController::class, 'list']);
-        Route::get('ticket-list', [TicketController::class, 'list']);
-        Route::post('filter-ticket', [TicketController::class, 'filter']);
+
+        Route::post('ticket-list', [TicketController::class, 'list']);
+//        Route::get('ticket-list', [TicketController::class, 'list']);
+//        Route::post('filter-ticket', [TicketController::class, 'filter']);
         Route::post('new-ticket', [TicketController::class, 'new']);
 
 
