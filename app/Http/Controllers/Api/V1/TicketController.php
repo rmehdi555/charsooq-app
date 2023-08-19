@@ -27,7 +27,7 @@ class TicketController extends Controller
             )
             ->when(
                 isset($request->date),
-                fn($q) => $q->where('tickets.created_at', '=', $request->date)
+                fn($q) => $q->where('tickets.created_at', 'Like', '%' . $request->date . '%')
             )
             ->when(
                 isset($request->status_id),
@@ -50,6 +50,7 @@ class TicketController extends Controller
 
     public function store(TicketStoreRequest $request)
     {
+        dd($request);
         $code = Convertors::datetocode();
         $invoice = Invoice::select('id')->where('code', $request->invoice_id)->get();
         $ticket = Ticket::create([
@@ -60,6 +61,7 @@ class TicketController extends Controller
             "code" => $code,
             "invoice_id" => $invoice[0]['id']
         ]);
+
         TicketLog::create([
             "content" => $request->body,
             "ticket_id" => $ticket->id,
