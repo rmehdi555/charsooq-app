@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AmazonProductController;
+use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\UserLoginController;
 use App\Http\Controllers\Api\V1\UserRegisterController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +33,8 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('profile', [ProfileController::class, 'profile']);
         Route::post('payment-list', [PaymentController::class, 'list']);
         Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
-
         Route::post('amazon-url', [AmazonProductController::class, 'url']);
+        Route::post('cart-store', [CartController::class, 'store']);
 
 
 

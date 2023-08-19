@@ -14,6 +14,7 @@ class Invoice extends Model
 
     protected $fillable = [
         'id',
+        'code',
         'isonesteppayment',
         'othercosts',
         'status',
@@ -23,6 +24,15 @@ class Invoice extends Model
         'agent_id',
         'user_id',
         'orderlevel',
+        'totalprice',
+        'totaltransportprice',
+        'totalitemprice',
+        'invoicingprice',
+        'new',
+        'address_id',
+        'description',
+        'isFromCharsooq'
+
     ];
 
     public function user(): BelongsTo
