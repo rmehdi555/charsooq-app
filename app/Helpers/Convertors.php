@@ -60,4 +60,12 @@ class Convertors
 
         return $unit;
     }
+    public static function datetocode()
+    {
+        $dts = date('Y-m-d H:i:s');
+        $num = rand(0, 999);
+        $dts = str_replace(str_split(' -:'), '', $dts) + $num;
+
+        return $dts;
+    }
 }

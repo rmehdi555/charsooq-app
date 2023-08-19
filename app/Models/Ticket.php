@@ -16,6 +16,7 @@ class Ticket extends Model
         'invoice_id',
         'user_id',
         'department_id',
+        'code'
     ];
 
     public function ticketStatus(): BelongsTo

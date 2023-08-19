@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\Convertors;
 use App\Http\Requests\V1\Register\TicketListRequest;
-use App\Models\Department;
+use App\Models\Invoice;
 use App\Models\Ticket;
 use App\Models\TicketLog;
 use App\Models\TicketStatus;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -40,22 +40,33 @@ class TicketController extends Controller
         return $this->successResponse($data , '');
     }
 
-    public function new(TicketListRequest $request)
+    public function createpage(): JsonResponse
+    {
+        $invoice=Invoice::select('code')->where('user_id','=',Auth::user()->id)->get();
+        return $this->successResponse($invoice , '');
+
+    }
+
+    public function insert(TicketListRequest $request)
     {
         $code = Convertors::datetocode();
-        Ticket::create([
+        $invoice=Invoice::select('id')->where('code','=',$request->invoiceid)->get();
+//        dd($invoice[0]['id']);
+        $tiketid=Ticket::create([
             "title"         => $request->title,
             "user_id"       => Auth::user()->id,
-            "status_id"     => 2,
+            "status_id"     => 1,
             "department_id" => $request->department_id,
-            "invoice_id"    => empty($request->invoice_id) ? null : $request->invoice_id,
             "code"          => $code,
+            "invoice_id"    => $invoice[0]['id']
         ]);
         TicketLog::create([
-            "content"       => $request->input('content'),
-            "attachment_id" => empty($request->attachment_id) ? null : $request->attachment_id,
+            "content" => $request->input('content'),
+            "ticket_id" => $tiketid->id,
+            "file_id" => empty($request->attachment_id) ? null : $request->attachment_id,
+            "department_id" => $request->department_id,
+            "status_id"     => 1
         ]);
-
-        return redirect('tickets');
+        return $this->successResponse($tiketid->id , __('messages.ticket_saved_successfully'));
     }
 }

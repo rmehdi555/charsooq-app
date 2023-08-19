@@ -26,6 +26,8 @@ return [
     'success_otp_validate' => 'احراز هویت با موفقیت انجام شد.',
     'error_user_not_validated' => 'برای دسترسی حتما احراز هویت کنید.',
     'url_entered_invalid' => 'لینک وارد شده غیر معتبر می باشد',
-    'url_entered_invalid_amazon' => 'لینک وارد شده مربوط به سایت امازونِ آمریکا نمی باشد'
-
+    'url_entered_invalid_amazon' => 'لینک وارد شده مربوط به سایت امازونِ آمریکا نمی باشد',
+    'item_found_success' => 'آیتم با موفقیت پیدا شد',
+    'item_not_found' => 'آیتم مد نظر پیدا نشد .',
+    'ticket_saved_successfully' => 'تیکت با موفقیت ثبت شد'
 ];
