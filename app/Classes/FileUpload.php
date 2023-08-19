@@ -48,6 +48,16 @@ class FileUpload
         return $this;
     }
 
+    public function setCategory(FileCategory $category): static
+    {
+        $this->category = $category->value;
+        $this->path = $category->entity()['path'];
+        $this->acceptableType = $category->entity()['types'];
+        $this->maxUploadSize = $category->entity()['maxUploadSize'];
+        $this->storageDisk = $category->entity()['fileSystem'];
+        return $this;
+    }
+
     /**
      * @throws Throwable
      */
@@ -113,6 +123,7 @@ class FileUpload
             'original_name' => $this->file->getClientOriginalName(),
             'size' => $this->file->getSize(),
             'user_id' => Auth::user()->id,
+            'file_category_id' => $this->category
         ]);
     }
 }

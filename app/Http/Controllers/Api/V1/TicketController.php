@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Classes\FileUpload;
+use App\Enum\FileCategory;
 use App\Helpers\Convertors;
 use App\Http\Requests\V1\Ticket\TicketIndexRequest;
 use App\Http\Requests\V1\Ticket\TicketStoreRequest;
@@ -48,9 +50,8 @@ class TicketController extends Controller
 
     }
 
-    public function store(TicketStoreRequest $request)
+    public function store(TicketStoreRequest $request, FileUpload $fileUpload)
     {
-        dd($request);
         $code = Convertors::datetocode();
         $invoice = Invoice::select('id')->where('code', $request->invoice_id)->get();
         $ticket = Ticket::create([
@@ -62,10 +63,18 @@ class TicketController extends Controller
             "invoice_id" => $invoice[0]['id']
         ]);
 
+        if (isset($request->file))
+            $file = $fileUpload->setKey('file')
+                ->setRequest($request)
+                ->setCaption('user image ticket | user_id: ' . Auth::id())
+                ->setCategory(FileCategory::tickets)
+                ->save();
+        $file_id = isset($file) ? $file->id : null;
+
         TicketLog::create([
             "content" => $request->body,
             "ticket_id" => $ticket->id,
-            "file_id" => empty($request->attachment_id) ? null : $request->attachment_id,
+            "file_id" => $file_id,
             "department_id" => $request->department_id,
             "status_id" => 1
         ]);
