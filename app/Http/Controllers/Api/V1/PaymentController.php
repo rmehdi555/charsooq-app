@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function list(PaymentListRequest $request): JsonResponse
+    public function index(PaymentListRequest $request): JsonResponse
     {
         $transaction = Transaction::where('transactions.user_id', Auth::id())
             ->when(

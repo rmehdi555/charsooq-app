@@ -32,14 +32,14 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('register-form', [UserRegisterController::class, 'registerForm']);
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
-        Route::post('payment-list', [PaymentController::class, 'list']);
+        Route::post('payment-index', [PaymentController::class, 'index']);
         Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
         Route::post('amazon-url', [AmazonProductController::class, 'url']);
         Route::post('cart-store', [CartController::class, 'store']);
 
-        Route::post('ticket-list', [TicketController::class, 'list']);
-        Route::get('create-ticket', [TicketController::class, 'createpage']);
-        Route::post('insert-ticket', [TicketController::class, 'insert']);
+        Route::post('ticket-index', [TicketController::class, 'index']);
+        Route::get('ticket-create', [TicketController::class, 'create']);
+        Route::post('ticket-store', [TicketController::class, 'store']);
 
     });
 

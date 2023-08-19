@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Register;
+namespace App\Http\Requests\V1\Ticket;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TicketListRequest extends FormRequest
+class TicketIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,9 @@ class TicketListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'nullable | max:50',
-            'department_id' => 'nullable | nullable',
-            'content' => 'nullable',
+            'title' => 'nullable|string',
+            'created_at' => 'nullable | date',
+            'status_id' => 'nullable|integer|exists:ticket_status,id',
         ];
     }
 }
