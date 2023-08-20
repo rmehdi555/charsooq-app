@@ -62,7 +62,6 @@ class TicketController extends Controller
             "code" => $code,
             "invoice_id" => $invoice[0]['id']
         ]);
-
         if (isset($request->file))
             $file = $fileUpload->setKey('file')
                 ->setRequest($request)
@@ -70,7 +69,6 @@ class TicketController extends Controller
                 ->setCategory(FileCategory::tickets)
                 ->save();
         $file_id = isset($file) ? $file->id : null;
-
         TicketLog::create([
             "content" => $request->body,
             "ticket_id" => $ticket->id,
