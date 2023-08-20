@@ -12,7 +12,7 @@ enum FileCategory: int
             self::tickets => [
                 'path' => '/tickets/',
                 'types' => 'image/jpeg',
-                'fileSystem' => 'ftp-secure',
+                'fileSystem' => 'public',
                 'maxUploadSize' => '5000000'
             ],
         };

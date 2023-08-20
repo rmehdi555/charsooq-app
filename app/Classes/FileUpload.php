@@ -67,6 +67,7 @@ class FileUpload
 
         $this->checkMimTypeOfFile();
 
+
         $this->checkMaxFileUploadFileSize();
 
         $this->newName = time() . '-' . $this->file->getClientOriginalName();
