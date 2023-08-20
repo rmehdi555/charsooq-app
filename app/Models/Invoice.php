@@ -31,7 +31,9 @@ class Invoice extends Model
         'new',
         'address_id',
         'description',
-        'isFromCharsooq'
+        'isFromCharsooq',
+        'lastmodifydate',
+        'invoicedate'
 
     ];
 

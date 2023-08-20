@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Helpers\Calculator;
+use App\Classes\Calculator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Calculator\CalculatorRequest;
 use App\Models\Exchanges;

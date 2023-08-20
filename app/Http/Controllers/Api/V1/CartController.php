@@ -5,17 +5,35 @@ namespace App\Http\Controllers\Api\V1;
 use App\Classes\InvoiceCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cart\CartStoreRequest;
+use App\Models\Exchanges;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Region;
+use App\Models\ShopingSite;
 use App\Models\User;
-use App\Notifications\Channels\SmsRahyabChannel;
+use App\Models\Weight;
 use App\Notifications\SendMessageNotification;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $regions = Region::all();
+        $exchanges = Exchanges::all();
+        $weight = Weight::all();
+        $shopingSite=ShopingSite::all();
+        return $this->successResponse([
+            'regions' => $regions,
+            'exchanges' => $exchanges,
+            'weight' => $weight,
+            'shopingSite' => $shopingSite
+        ]);
+    }
+
     public function store(CartStoreRequest $request): JsonResponse
     {
         $code = InvoiceCode::generateCode();
@@ -32,7 +50,9 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'address_id' => 1,
             'description' => $request->description ?? '',
-            'isFromCharsooq' => 1
+            'isFromCharsooq' => 1,
+            'lastmodifydate' => Carbon::now(),
+            'invoicedate' => Carbon::today()->toDateString(),
         ];
         DB::beginTransaction();
         try {

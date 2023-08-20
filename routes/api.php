@@ -45,6 +45,8 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('calculator-index', [CalculatorController::class, 'index']);
         Route::post('calculator-show', [CalculatorController::class, 'show']);
 
+        Route::post('cart-index', [CartController::class, 'index']);
+
     });
 
 });

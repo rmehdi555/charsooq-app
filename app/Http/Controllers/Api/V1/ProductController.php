@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Helpers\Calculator;
+use App\Classes\Calculator;
 use App\Http\Controllers\Controller;
 use App\Models\CrawlerProduct;
 use Illuminate\Http\JsonResponse;

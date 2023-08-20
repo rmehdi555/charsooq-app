@@ -37,7 +37,6 @@
         "files": [
             "app/Helpers/GeneralHelper.php",
             "app/Helpers/PersianToolsHelper.php",
-            "app/Helpers/Calculator.php",
             "app/Helpers/Convertors.php"
         ]
     },
