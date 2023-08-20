@@ -18,7 +18,6 @@ class CartController extends Controller
 {
     public function store(CartStoreRequest $request): JsonResponse
     {
-        $cart = json_decode($request->cart);
         $code = InvoiceCode::generateCode();
         $invoices_data = [
             'status' => 'در حال بررسی',
@@ -37,16 +36,15 @@ class CartController extends Controller
         ];
         DB::beginTransaction();
         try {
-            $invoices_inserted_id = Invoice::create($invoices_data);
-            $invoices_item_inserted_id = 0;
-
-            foreach ($cart as $key => $cart_item) {
-                $invoices_item_data = [
-                    'link' => $cart_item['url'],
+            $invoice = Invoice::create($invoices_data);
+            $invoicesItemId = 0;
+            foreach ($request->cart as $key => $cart_item) {
+                $invoiceItemData = [
+                    'link' => $cart_item['link'],
                     'name' => $cart_item['name'] ?? null,
-                    'cost' => $cart_item['price'],
-                    'count' => $cart_item['quantity'],
-                    'firstweight' => $cart_item['weight'],
+                    'cost' => $cart_item['cost'],
+                    'count' => $cart_item['count'],
+                    'firstweight' => $cart_item['firstweight'],
                     'ischecked' => 0,
                     'isauction' => 0,
                     'isapproved' => 0,
@@ -56,19 +54,19 @@ class CartController extends Controller
                     'itemprice' => 0,
                     'exchangevalue' => 0,
                     'brokerwageprice' => 0,
-                    'singleitemfullprice' => $cart_item['priceRial'],
+                    'singleitemfullprice' => $cart_item['singleitemfullprice'],
                     'apistatus' => 0,
-                    'invoice_id' => $invoices_inserted_id,
+                    'invoice_id' => $invoice->id,
                     'exchange_id' => $cart_item['exchange_id'],
                     'description' => $cart_item['description'],
                     'region_id' => $cart_item['region_id'],
                     'image' => $cart_item['image'],
                     'breakable' => 0
                 ];
-                $invoices_item_inserted_id = InvoiceItem::create($invoices_item_data);
+                $invoicesItemId = InvoiceItem::create($invoiceItemData)->id;
             }
             DB::commit();
-            if ($invoices_inserted_id >= 1 and $invoices_item_inserted_id >= 1) {
+            if ($invoice->id >= 1 and $invoicesItemId >= 1) {
                 $user = User::find(Auth::id());
                 $user->notify(new SendMessageNotification($user['name'] . __('messages.sms_for_user_new_invoice') . $code));
                 return $this->successResponse([

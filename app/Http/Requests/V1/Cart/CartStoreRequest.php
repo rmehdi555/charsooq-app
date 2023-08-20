@@ -23,7 +23,7 @@ class CartStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cart.*' => 'required',
+            'cart' => 'required|array',
             'cart.*.link' => 'required|string',
             'cart.*.name' => 'required|string',
             'cart.*.cost' => 'required|string',
@@ -33,7 +33,7 @@ class CartStoreRequest extends FormRequest
             'cart.*.exchange_id' => 'required|integer',
             'cart.*.description' => 'required|string',
             'cart.*.region_id' => 'required|integer',
-            'cart.*.image' => 'required|integer',
+            'cart.*.image' => 'required|string',
             'description' => 'nullable|string'
         ];
     }
