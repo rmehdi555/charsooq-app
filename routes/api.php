@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AmazonProductController;
+use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\PaymentController;
@@ -42,6 +43,11 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('ticket-create', [TicketController::class, 'create']);
         Route::post('ticket-store', [TicketController::class, 'store']);
         Route::post('invoice-index', [InvoiceController::class, 'index']);
+
+        Route::get('calculator-index', [CalculatorController::class, 'index']);
+        Route::post('calculator-show', [CalculatorController::class, 'show']);
+
+        Route::post('cart-index', [CartController::class, 'index']);
 
     });
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Classes;
 
+use App\Helpers\Convertors;
 use App\Models\CalculatorConfig;
 use App\Models\Exchanges;
 

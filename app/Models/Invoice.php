@@ -32,6 +32,10 @@ class Invoice extends Model
         'address_id',
         'description',
         'isFromCharsooq',
+<<<<<<< HEAD
+=======
+        'lastmodifydate',
+>>>>>>> f7d8115420a7ba592ef5207323c2fb581ca0748f
         'invoicedate'
 
     ];

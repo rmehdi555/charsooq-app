@@ -118,7 +118,7 @@ class FileUpload
     {
         return File::create([
             'caption' => $this->caption,
-            'path' => $this->path . $this->newName,
+            'path' => env('APP_URL') . $this->path . $this->newName,
             'extensions' => $this->file->getClientMimeType(),
             'hash' => md5($this->path . $this->newName),
             'original_name' => $this->file->getClientOriginalName(),
