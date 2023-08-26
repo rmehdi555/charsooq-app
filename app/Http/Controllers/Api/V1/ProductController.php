@@ -15,6 +15,7 @@ class ProductController extends Controller
         if (!filled($product))
             return $this->errorResponse(__('messages.item_not_found'), 404);
         $product->setHidden(['response']);
+        $product->increment('view_count');
         $priceRial = Calculator::singleProduct(
             $product['price'],
             $product['weight_unit'],
