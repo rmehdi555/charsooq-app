@@ -9,6 +9,8 @@ return [
         '1' => 'zarinpal',
         '11' => 'melli',
     ],
+    'map_wallets_payment_default' => 1,
+
 
 
     /*

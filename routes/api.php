@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\UserLoginController;
 use App\Http\Controllers\Api\V1\UserRegisterController;
+use App\Http\Controllers\Api\V1\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +50,11 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
         Route::post('cart-index', [CartController::class, 'index']);
 
+
+        Route::post('wallet-charge', [WalletController::class, 'walletCharge']);
+
     });
+
+    Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
 
 });
