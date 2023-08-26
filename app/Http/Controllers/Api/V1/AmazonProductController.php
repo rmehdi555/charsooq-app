@@ -16,10 +16,14 @@ class AmazonProductController extends Controller
     {
         if ($asin = extractAsinAmazon($request->url)) {
             $product = CrawlerProduct::where('asin', 'amz-' . $asin)->first();
-            if (filled($product))
+
+            if (filled($product)) {
+                ++$product->view_count;
+                $product->save();
                 return $this->successResponse([
                     'asin' => 'amz-' . $asin,
                 ], __('messages.item_found_success'));
+            }
         }
 
         $response = json_decode((new AxessoWebService)->amazonProductInfo($request->url), true);
@@ -57,6 +61,7 @@ class AmazonProductController extends Controller
             'categories' => $data['categories'],
             'variations' => $data['variations'],
             'response' => $response,
+            'view_count' => 1,
 
         ]);
 

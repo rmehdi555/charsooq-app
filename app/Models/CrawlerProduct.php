@@ -31,6 +31,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @param string $weight_unit
  * @param array $categories
  * @param array $variations
+ * @param integer $view_count
  */
 class CrawlerProduct extends Model
 {
