@@ -14,13 +14,14 @@ class TicketListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        return array(
             'code' => $this->code,
             'title' => $this->title,
             'status_id' => $this->ticketStatus->name,
             'created_at' => $this->created_at,
-            'department_id' => $this->department->name
+            'department_id' => $this->department->name,
+            'is_response' => ($this->ticketStatus->id==4) ? true : false
 
-        ];
+        );
     }
 }

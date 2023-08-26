@@ -38,4 +38,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function logs(): BelongsTo
+    {
+        return $this->belongsTo(TicketLog::class, 'ticket_id', 'id');
+    }
 }

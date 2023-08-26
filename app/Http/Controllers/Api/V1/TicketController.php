@@ -21,7 +21,6 @@ class TicketController extends Controller
 
     public function index(TicketIndexRequest $request): JsonResponse
     {
-
         $ticket = Ticket::where('user_id', Auth::id())
             ->when(
                 isset($request->title),
@@ -45,7 +44,7 @@ class TicketController extends Controller
 
     public function create(): JsonResponse
     {
-        $invoice = Invoice::select('code')->where('user_id', '=', Auth::user()->id)->get();
+        $invoice = Invoice::select('code')->where('user_id', Auth::user()->id)->get();
         return $this->successResponse($invoice, '');
 
     }
@@ -77,5 +76,37 @@ class TicketController extends Controller
             "status_id" => 1
         ]);
         return $this->successResponse($ticket->id, __('messages.ticket_saved_successfully'));
+    }
+
+    public function show($code): JsonResponse
+    {
+        $ticket = Ticket::where('user_id', Auth::user()->id)
+            ->where('code',$code )
+//            ->leftjoin('ticket', 'ticket.id', '=', 'ticket_logs.ticket_id')
+//            ->leftjoin('users', 'users.id', '=', 'ticket_logs.agent_id')
+            ->first();
+        dd($ticket->logs);
+        return $this->successResponse($ticket, '');
+    }
+
+    public function reply(TicketStoreRequest $request, FileUpload $fileUpload): JsonResponse
+    {
+        $ticket = Ticket::where('code',$request->code)
+        ->update(["status_id" => 1]);
+        if (isset($request->file))
+            $file = $fileUpload->setKey('file')
+                ->setRequest($request)
+                ->setCaption('user image ticket | user_id: ' . Auth::id())
+                ->setCategory(FileCategory::tickets)
+                ->save();
+        $file_id = isset($file) ? $file->id : null;
+        $ticketlog=TicketLog::create([
+            "content" => $request->body,
+            "ticket_id" => $ticket->id,
+            "file_id" => $file_id,
+            "department_id" => $request->department_id,
+            "status_id" => 1
+        ]);
+        return $this->successResponse($ticketlog->id, __('messages.ticket_saved_successfully'));
     }
 }

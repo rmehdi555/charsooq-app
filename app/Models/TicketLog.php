@@ -26,4 +26,8 @@ class TicketLog extends Model
     {
         return $this->belongsTo(User::class, 'agent_id', 'id');
     }
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class,'department_id');
+    }
 }

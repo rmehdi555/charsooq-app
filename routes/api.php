@@ -42,6 +42,9 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('ticket-index', [TicketController::class, 'index']);
         Route::get('ticket-create', [TicketController::class, 'create']);
         Route::post('ticket-store', [TicketController::class, 'store']);
+        Route::post('ticket-reply', [TicketController::class, 'reply']);
+        Route::get('ticket-show/{code}', [TicketController::class, 'show']);
+
         Route::post('invoice-index', [InvoiceController::class, 'index']);
 
         Route::get('calculator-index', [CalculatorController::class, 'index']);
