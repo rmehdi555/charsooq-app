@@ -7,6 +7,7 @@ use App\Enum\FileCategory;
 use App\Helpers\Convertors;
 use App\Http\Requests\V1\Ticket\TicketIndexRequest;
 use App\Http\Requests\V1\Ticket\TicketStoreRequest;
+use App\Http\Resources\TicketShowLogResource;
 use App\Models\Invoice;
 use App\Models\Ticket;
 use App\Models\TicketLog;
@@ -81,18 +82,21 @@ class TicketController extends Controller
     public function show($code): JsonResponse
     {
         $ticket = Ticket::where('user_id', Auth::user()->id)
-            ->where('code',$code )
-//            ->leftjoin('ticket', 'ticket.id', '=', 'ticket_logs.ticket_id')
-//            ->leftjoin('users', 'users.id', '=', 'ticket_logs.agent_id')
+            ->where('code', $code)
             ->first();
-        dd($ticket->logs);
-        return $this->successResponse($ticket, '');
+        if (!filled($ticket))
+            return $this->errorResponse(__('messages.item_not_found'), 404);
+        $data=[];
+        $data['logs']=$ticket->logs;
+        $data['user_name']=$ticket->user->name;
+        $data['logs']=TicketShowLogResource::collection($data['logs']);
+        return $this->successResponse($data, '');
     }
 
     public function reply(TicketStoreRequest $request, FileUpload $fileUpload): JsonResponse
     {
-        $ticket = Ticket::where('code',$request->code)
-        ->update(["status_id" => 1]);
+        $ticket = Ticket::where('code', $request->code)
+            ->update(["status_id" => 1]);
         if (isset($request->file))
             $file = $fileUpload->setKey('file')
                 ->setRequest($request)
@@ -100,7 +104,7 @@ class TicketController extends Controller
                 ->setCategory(FileCategory::tickets)
                 ->save();
         $file_id = isset($file) ? $file->id : null;
-        $ticketlog=TicketLog::create([
+        $ticketlog = TicketLog::create([
             "content" => $request->body,
             "ticket_id" => $ticket->id,
             "file_id" => $file_id,

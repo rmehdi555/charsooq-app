@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Exceptions\Handler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use mysql_xdevapi\Collection;
 
 class Ticket extends Model
 {
@@ -36,11 +38,11 @@ class Ticket extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 
-    public function logs(): BelongsTo
+    public function logs()
     {
-        return $this->belongsTo(TicketLog::class, 'ticket_id', 'id');
+        return $this->hasMany(TicketLog::class, 'ticket_id', 'id');
     }
 }
