@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AmazonProductController;
 use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
@@ -53,8 +54,11 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
         Route::post('cart-index', [CartController::class, 'index']);
 
-
         Route::post('wallet-charge', [WalletController::class, 'walletCharge']);
+
+        Route::get('address-index', [AddressController::class, 'index']);
+        Route::post('address-store', [AddressController::class, 'store']);
+        Route::put('address-update/{id}', [AddressController::class, 'update']);
 
     });
 

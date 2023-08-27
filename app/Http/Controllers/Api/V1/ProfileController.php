@@ -18,6 +18,7 @@ class ProfileController extends Controller
             'email' => $user->email,
             'cell_number' => $user->cell_number,
             'national_code' => $user->national_code,
+            'wallet_balance' => $user->wallet_balance,
         ], '');
     }
 }
