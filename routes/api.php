@@ -53,6 +53,7 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('ticket-show/{code}', [TicketController::class, 'show']);
 
         Route::post('invoice-index', [InvoiceController::class, 'index']);
+        Route::post('invoice-show/{code}', [InvoiceController::class, 'show']);
 
         Route::get('calculator-index', [CalculatorController::class, 'index']);
         Route::post('calculator-show', [CalculatorController::class, 'show']);
