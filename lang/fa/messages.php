@@ -32,9 +32,9 @@ return [
     'ticket_saved_successfully' => 'تیکت با موفقیت ثبت شد',
     'sms_for_user_new_invoice' => 'عزیز، سفارش شما را دریافت کردیم. حداکثر تا 24 ساعت آینده پیش فاکتور شما صادر خواهد شد. شماره سفارش :  ',
     'cart_store_failed' => 'در ثبت اطلاعات سبد خطا رخ داده است  ',
-    'create_success'=>'ثبت اطلاعات با موفقیت انجام شد',
+    'create_success' => 'ثبت اطلاعات با موفقیت انجام شد',
     'success_update' => 'اطلاعات با موفقیت ویرایش شد.',
     'register_not_complete' => 'ابتدا باید مشخصات کاربری را کامل کنید',
-    'email_saved_successfully'=>'ایمیل با موفقیت ثبت شد',
-    'profile_update_successfully'=>'پروفایل با موفقیت به روز رسانی شد',
+    'email_saved_successfully' => 'ایمیل با موفقیت ثبت شد',
+    'profile_update_successfully' => 'پروفایل با موفقیت به روز رسانی شد',
 ];

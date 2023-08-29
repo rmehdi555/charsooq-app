@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AmazonProductController;
 use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\DashbboardController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\NewsController;
 use App\Http\Controllers\Api\V1\PaymentController;
@@ -66,6 +67,7 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('address-store', [AddressController::class, 'store']);
         Route::put('address-update/{id}', [AddressController::class, 'update']);
 
+        Route::get('dashboard-index', [DashbboardController::class, 'index']);
 
 
     });
