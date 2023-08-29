@@ -34,5 +34,7 @@ return [
     'cart_store_failed' => 'در ثبت اطلاعات سبد خطا رخ داده است  ',
     'create_success'=>'ثبت اطلاعات با موفقیت انجام شد',
     'success_update' => 'اطلاعات با موفقیت ویرایش شد.',
-    'register_not_complete' => 'ابتدا باید مشخصات کاربری را کامل کنید'
+    'register_not_complete' => 'ابتدا باید مشخصات کاربری را کامل کنید',
+    'email_saved_successfully'=>'ایمیل با موفقیت ثبت شد',
+    'profile_update_successfully'=>'پروفایل با موفقیت به روز رسانی شد',
 ];
