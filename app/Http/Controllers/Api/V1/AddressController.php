@@ -53,7 +53,7 @@ class AddressController extends Controller
         $address->save();
         return $this->successResponse([
             'address' => $address,
-        ], __('messages.success_upload_file'));
+        ], __('messages.success_update'));
 
     }
 }

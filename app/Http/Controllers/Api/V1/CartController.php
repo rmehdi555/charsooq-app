@@ -25,7 +25,7 @@ class CartController extends Controller
         $regions = Region::all();
         $exchanges = Exchanges::all();
         $weight = Weight::all();
-        $shopingSite=ShopingSite::all();
+        $shopingSite = ShopingSite::all();
         return $this->successResponse([
             'regions' => $regions,
             'exchanges' => $exchanges,
@@ -88,7 +88,7 @@ class CartController extends Controller
             DB::commit();
             if ($invoice->id >= 1 and $invoicesItemId >= 1) {
                 $user = User::find(Auth::id());
-                $user->notify(new SendMessageNotification($user['name'] . __('messages.sms_for_user_new_invoice') . $code));
+                $user->notify(new SendMessageNotification($user['name'] . ' ' . __('messages.sms_for_user_new_invoice') . $code));
                 return $this->successResponse([
                     'code' => $code,
                 ], $user['name'] . __('messages.sms_for_user_new_invoice') . $code);
