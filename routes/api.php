@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AmazonProductController;
 use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\NewsController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\TicketController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -31,11 +32,14 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
     Route::post('register-validate-otp', [UserRegisterController::class, 'validateOtp']);
     Route::post('send-otp', [UserLoginController::class, 'getNumber'])->middleware('throttle:login');
     Route::post('validate-otp', [UserLoginController::class, 'validateOTP'])->middleware('throttle:login');
+    Route::post('news', [NewsController::class, 'add']);
 
     Route::middleware(['auth:api'])->group(function () {
         Route::post('register-form', [UserRegisterController::class, 'registerForm']);
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
+        Route::put('profile-update', [ProfileController::class, 'update']);
+
         Route::post('payment-index', [PaymentController::class, 'index']);
         Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
         Route::post('amazon-url', [AmazonProductController::class, 'url']);
@@ -59,6 +63,8 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('address-index', [AddressController::class, 'index']);
         Route::post('address-store', [AddressController::class, 'store']);
         Route::put('address-update/{id}', [AddressController::class, 'update']);
+
+
 
     });
 
