@@ -30,7 +30,6 @@ class AmazonProductController extends Controller
         $data = AxessoWebServiceDTO::extractDetail($response, $request->url);
         $data['region'] = 1;
 
-
         CrawlerProduct::create([
             'website' => 'www.amazon.com',
             'source' => 'api-prd.axesso.de',
