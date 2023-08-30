@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function show($asin): JsonResponse
     {
         $product = CrawlerProduct::where('asin', $asin)->first();
-        if (!filled($product))
+        if (!filled($product) or $product->is_banned == 1)
             return $this->errorResponse(__('messages.item_not_found'), 404);
         $product->setHidden(['response']);
         $product->increment('view_count');
