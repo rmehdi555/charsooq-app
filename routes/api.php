@@ -70,6 +70,10 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
 
+        Route::get('article-index', [DashbboardController::class, 'index']);
+        Route::get('article-category', [DashbboardController::class, 'index']);
+        Route::get('article-show', [DashbboardController::class, 'index']);
+
 
     });
 
