@@ -57,6 +57,7 @@ class AmazonProductController extends Controller
             'categories' => $data['categories'],
             'variations' => $data['variations'],
             'response' => $response,
+            'is_banned' => 0,
             'view_count' => 0,
 
         ]);

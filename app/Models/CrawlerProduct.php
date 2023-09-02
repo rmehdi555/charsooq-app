@@ -32,6 +32,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @param array $categories
  * @param array $variations
  * @param integer $view_count
+ * @param bool $is_banned
  */
 class CrawlerProduct extends Model
 {

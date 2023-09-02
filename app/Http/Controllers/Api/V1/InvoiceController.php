@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Invoice\InvoiceIndexRequest;
+use App\Http\Resources\InvoiceItemResource;
 use App\Http\Resources\InvoiceListResource;
 use App\Models\Invoice;
-use App\Models\InvoiceItem;
+use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -38,5 +38,28 @@ class InvoiceController extends Controller
         $order_level = ['درخواست', 'فاکتور', 'سفارش', 'تسویه', 'ارسال', 'تحویل', 'نامشخص', 'آماده برای پرداخت', 'پرداخت شده', 'ارسال به مشتری', 'تحویل مشتری'];
         $invoice->put('orderlevel', $order_level);
         return $this->successResponse($invoice, '');
+    }
+
+    public function show($code): JsonResponse
+    {
+        $invoice = Invoice::where('code', $code)->first();
+        if (!filled($invoice) or $invoice->user_id != Auth::id())
+            return $this->errorResponse(__('messages.item_not_found'), 404);
+        $data = [];
+        $data['code'] = $code;
+        $data['invoice_status'] = $invoice->status;
+        $data['items'] = InvoiceItemResource::collection($invoice->invoiceItems);
+        $data['invoice_othercosts'] = $invoice->invoiceOthercosts->sum('OtherCostPrice');
+
+        $price = 0;
+        foreach ($invoice->invoiceItems as $item) {
+            if ($item->isapproved == 1)
+                $price = $price + ($item->singleitemfullprice * $item->count);
+        }
+        $data['price'] = (int)$price;
+        $data['sum_pay'] = Transaction::where('invoice_id', $invoice->id)->sum('amount');
+        $data['price_for_pay'] = (int)$price + (int)$invoice->invoiceOthercosts->sum('OtherCostPrice') - (int)$data['sum_pay'];
+
+        return $this->successResponse($data, '');
     }
 }
