@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Classes\InvoiceCode;
+use App\Helpers\Convertors;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cart\CartStoreRequest;
 use App\Http\Resources\AddressResource;
@@ -69,7 +70,7 @@ class CartController extends Controller
                     'name' => $cart_item['name'] ?? null,
                     'cost' => $cart_item['cost'],
                     'count' => $cart_item['count'],
-                    'firstweight' => $cart_item['firstweight'],
+                    'firstweight' => Convertors::weightConverter($cart_item['weight_unit'], $cart_item['firstweight']),
                     'ischecked' => 0,
                     'isauction' => 0,
                     'isapproved' => 0,

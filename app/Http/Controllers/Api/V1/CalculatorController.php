@@ -27,7 +27,7 @@ class CalculatorController extends Controller
     {
         $priceRial = Calculator::singleProduct(
             $request->price,
-            $request->weight_title,
+            $request->weight_unit,
             $request->exchange_id,
             $request->region_id,
             $request->weight
