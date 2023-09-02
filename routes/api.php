@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AmazonProductController;
+use App\Http\Controllers\Api\V1\ArticlesController;
 use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\DashbboardController;
@@ -70,13 +71,11 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
 
-        Route::get('article-index', [DashbboardController::class, 'index']);
-        Route::get('article-category', [DashbboardController::class, 'index']);
-        Route::get('article-show', [DashbboardController::class, 'index']);
-
-
     });
 
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
 
+    Route::get('article-show', [ArticlesController::class, 'index']);
+    Route::get('article-category', [ArticlesController::class, 'category']);
+    Route::get('category-show/{slug}', [ArticlesController::class, 'categoryshow']);
 });
