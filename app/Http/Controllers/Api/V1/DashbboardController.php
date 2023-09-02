@@ -16,7 +16,6 @@ class DashbboardController extends Controller
     {
         $user = User::where('id', Auth::id())->get();
         $tickets = Ticket::where('user_id', Auth::id())->where('status_id','!=',7)->count();
-//        dd(Auth::id());
         $invoices = Invoice::where('user_id', Auth::id())->count();
         $buy_invoice = Invoice::where('user_id', Auth::id())->where('orderlevel','!=',['درخواست','نامشخص','آماده برای پرداخت'])->count();
         return $this->successResponse([
