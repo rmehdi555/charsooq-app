@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Invoice\InvoiceIndexRequest;
 use App\Http\Resources\InvoiceItemResource;
+use App\Http\Resources\InvoiceOthercostResource;
+use App\Http\Resources\TransactionResource;
 use App\Models\Invoice;
+use App\Models\InvoicesOthercosts;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -49,9 +52,13 @@ class InvoiceController extends Controller
         $data['invoice_status'] = $invoice->status;
         $data['items'] = InvoiceItemResource::collection($invoice->invoiceItems);
         $data['othercost'] = $invoice->othercost;
+        $data['othercost_list'] = InvoicesOthercosts::where('invoice_id', $invoice->id)->get();
+        $data['othercost_list'] = InvoiceOthercostResource::collection($data['othercost_list']);
         $data['totaltransportprice'] = $invoice->totaltransportprice;
         $data['totalitemprice'] = $invoice->totalitemprice;
         $data['brokerwageprice'] = $invoice->brokerwageprice;
+        $data['transaction_list'] = Transaction::where('invoice_id', $invoice->id)->get();
+        $data['transaction_list'] = TransactionResource::collection($data['transaction_list']);
 
         $price = 0;
         foreach ($invoice->invoiceItems as $item) {
