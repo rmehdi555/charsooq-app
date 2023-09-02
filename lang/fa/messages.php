@@ -37,4 +37,5 @@ return [
     'register_not_complete' => 'ابتدا باید مشخصات کاربری را کامل کنید',
     'email_saved_successfully' => 'ایمیل با موفقیت ثبت شد',
     'profile_update_successfully' => 'پروفایل با موفقیت به روز رسانی شد',
+    'register_at_least_one_address' => 'برای ثبت سفارش باید حداقل یک آدرس وارد شده باشد'
 ];

@@ -59,8 +59,8 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('calculator-index', [CalculatorController::class, 'index']);
         Route::post('calculator-show', [CalculatorController::class, 'show']);
 
-        Route::post('cart-index', [CartController::class, 'index'])->middleware(UserRegisterComplete::class);
-        Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);;
+        Route::post('cart-index', [CartController::class, 'index']);
+        Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
 
         Route::post('wallet-charge', [WalletController::class, 'walletCharge']);
 

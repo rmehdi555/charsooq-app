@@ -21,8 +21,8 @@ class AddressController extends Controller
         $address = UserAddress::where('user_id', Auth::id())->get();
         $address = AddressResource::collection($address);
         return $this->successResponse([
-            'state' => $state,
-            'address' => $address
+            'address' => $address,
+            'state' => $state
         ], '');
     }
 
