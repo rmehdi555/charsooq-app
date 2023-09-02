@@ -28,6 +28,7 @@ class CartStoreRequest extends FormRequest
             'cart.*.name' => 'required|string',
             'cart.*.cost' => 'required|string',
             'cart.*.count' => 'required|integer',
+            'cart.*.weight_unit' => 'required|string|exists:weights,title',
             'cart.*.firstweight' => 'required',
             'cart.*.singleitemfullprice' => 'required',
             'cart.*.exchange_id' => 'required|integer',

@@ -24,7 +24,7 @@ class CalculatorRequest extends FormRequest
     {
         return [
             'price' => 'required|numeric',
-            'weight_title' => 'required|string|exists:weights,title',
+            'weight_unit' => 'required|string|exists:weights,title',
             'exchange_id' => 'required|integer|exists:exchanges,id',
             'region_id' => 'required|integer|exists:regions,id',
             'weight' => 'required|integer',
