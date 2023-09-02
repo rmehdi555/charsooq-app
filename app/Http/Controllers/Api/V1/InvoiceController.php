@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Invoice\InvoiceIndexRequest;
 use App\Http\Resources\InvoiceItemResource;
-use App\Http\Resources\InvoiceListResource;
 use App\Models\Invoice;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
@@ -49,7 +48,10 @@ class InvoiceController extends Controller
         $data['code'] = $code;
         $data['invoice_status'] = $invoice->status;
         $data['items'] = InvoiceItemResource::collection($invoice->invoiceItems);
-        $data['invoice_othercosts'] = $invoice->invoiceOthercosts->sum('OtherCostPrice');
+        $data['othercost'] = $invoice->othercost;
+        $data['totaltransportprice'] = $invoice->totaltransportprice;
+        $data['totalitemprice'] = $invoice->totalitemprice;
+        $data['brokerwageprice'] = $invoice->brokerwageprice;
 
         $price = 0;
         foreach ($invoice->invoiceItems as $item) {

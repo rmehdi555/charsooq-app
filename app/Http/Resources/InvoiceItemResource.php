@@ -21,13 +21,14 @@ class InvoiceItemResource extends JsonResource
             'count' => $this->count,
             'cost' => $this->cost,
             'exchange_id' => $this->exchange_id,
-            'exchange'=>Exchanges::whereId($this->exchange_id)->value('name'),
-            'firstweight'=>$this->firstweight,
-            'itemprice'=>$this->itemprice,
-            'transportprice'=>$this->transportprice,
+            'exchange' => Exchanges::whereId($this->exchange_id)->value('name'),
+            'firstweight' => $this->firstweight,
+            'itemprice' => $this->itemprice,
+            'transportprice' => $this->transportprice,
+            'brokerwageprice' => $this->brokerwageprice,
             'description' => $this->description,
-            'all_price'=>$this->singleitemfullprice * $this->count,
-            'image'=>$this->image,
+            'all_price' => $this->singleitemfullprice * $this->count,
+            'image' => $this->image,
         ];
     }
 }

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api\V1;
 use App\Classes\InvoiceCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cart\CartStoreRequest;
+use App\Http\Resources\AddressResource;
 use App\Models\Exchanges;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Region;
 use App\Models\ShopingSite;
 use App\Models\User;
+use App\Models\UserAddress;
 use App\Models\Weight;
 use App\Notifications\SendMessageNotification;
 use Illuminate\Http\JsonResponse;
@@ -26,11 +28,14 @@ class CartController extends Controller
         $exchanges = Exchanges::all();
         $weight = Weight::all();
         $shopingSite = ShopingSite::all();
+        $userAddress = UserAddress::where('user_id', Auth::id())->get();
+        $userAddress = AddressResource::collection($userAddress);
         return $this->successResponse([
             'regions' => $regions,
             'exchanges' => $exchanges,
             'weight' => $weight,
-            'shopingSite' => $shopingSite
+            'shopingSite' => $shopingSite,
+            'userAddress' => $userAddress
         ]);
     }
 
@@ -48,7 +53,7 @@ class CartController extends Controller
             'new' => 1,
             'isonesteppayment' => 0,
             'user_id' => Auth::id(),
-            'address_id' => 1,
+            'address_id' => $request->address_id,
             'description' => $request->description ?? '',
             'isFromCharsooq' => 1,
             'lastmodifydate' => Carbon::now(),

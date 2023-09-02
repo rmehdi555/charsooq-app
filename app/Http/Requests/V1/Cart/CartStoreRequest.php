@@ -34,7 +34,8 @@ class CartStoreRequest extends FormRequest
             'cart.*.description' => 'required|string',
             'cart.*.region_id' => 'required|integer',
             'cart.*.image' => 'required|string',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'address_id' => 'nullable|integer|exists:users_addresses,id'
         ];
     }
 }
