@@ -13,7 +13,8 @@ class ArticlesController extends Controller
 {
     public function index(): JsonResponse
     {
-        $aricles = Article::all();
+        $aricles = Article::latest()
+            ->paginate(config('custom.paginate_count'));
         $data=ArticleindexResource::collection($aricles);
         return $this->successResponse($data, '');
     }
@@ -30,6 +31,5 @@ class ArticlesController extends Controller
         $aricles = Article::where('category_id',$ariclecategory[0]->id)->get();
         $data=ArticleindexResource::collection($aricles);
         return $this->successResponse($data, '');
-
     }
 }
