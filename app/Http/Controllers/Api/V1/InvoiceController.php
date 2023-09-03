@@ -57,6 +57,7 @@ class InvoiceController extends Controller
         $data['transaction_list'] = Transaction::where('invoice_id', $invoice->id)->get();
         $data['transaction_list'] = TransactionResource::collection($data['transaction_list']);
         $data['sum_pay'] = Transaction::where('invoice_id', $invoice->id)->sum('amount');
+        $data['othercost'] = InvoicesOthercosts::where('invoice_id', $invoice->id)->sum('OtherCostPrice');
 
         switch ($invoice->orderlevel) {
             case 'درخواست':
@@ -65,13 +66,11 @@ class InvoiceController extends Controller
                 $data['brokerwage_price'] = 'نامشخص';
                 $data['total_price'] = 'نامشخص';
                 $data['price_for_pay'] = 'نامشخص';
-                $data['othercost'] = 'نامشخص';
                 $data['is_pay'] = false;
                 break;
             case 'فاکتور':
                 $data['total_transport_price'] = $invoice->totaltransportprice;
                 $data['total_item_price'] = $invoice->totalitemprice;
-                $data['othercost'] = $invoice->othercost;
                 $data['total_price'] = (int)$invoice->totalitemprice + (int)$invoice->totaltransportprice + (int)$data['othercost'];
                 $data['price_for_pay'] = $data['total_price'] - (int)$data['sum_pay'];
                 $data['is_pay'] = true;
@@ -79,7 +78,6 @@ class InvoiceController extends Controller
             case 'آماده برای پرداخت':
                 $data['total_transport_price'] = $invoice->finalTotaltransportprice;
                 $data['total_item_price'] = $invoice->finalTotalitemprice;
-                $data['othercost'] = $invoice->finalOthercosts;
                 $data['total_price'] = (int)$invoice->finalTotalitemprice + (int)$invoice->finalTotaltransportprice + (int)$data['othercost'];
                 $data['price_for_pay'] = $data['total_price'] - (int)$data['sum_pay'];
                 $data['is_pay'] = true;
@@ -88,8 +86,8 @@ class InvoiceController extends Controller
             default:
                 $data['total_transport_price'] = $invoice->totaltransportprice;
                 $data['total_item_price'] = $invoice->totalitemprice;
-                $data['total_price'] = $invoice->totalitemprice + $invoice->totaltransportprice;
-                $data['price_for_pay'] = (int)$data['total_price'] + (int)$invoice->totaltransportprice - (int)$data['sum_pay'];
+                $data['total_price'] = $invoice->totalitemprice + $invoice->totaltransportprice + (int)$data['othercost'];
+                $data['price_for_pay'] = (int)$data['total_price'] - (int)$data['sum_pay'];
                 $data['is_pay'] = false;
                 break;
 
