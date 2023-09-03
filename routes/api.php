@@ -46,7 +46,6 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('payment-index', [PaymentController::class, 'index']);
 
         Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
-        Route::post('amazon-url', [AmazonProductController::class, 'url']);
 
         Route::post('ticket-index', [TicketController::class, 'index']);
         Route::get('ticket-create', [TicketController::class, 'create']);
@@ -78,4 +77,6 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
     Route::get('article-show', [ArticlesController::class, 'index']);
     Route::get('article-category', [ArticlesController::class, 'category']);
     Route::get('category-show/{slug}', [ArticlesController::class, 'categoryshow']);
+    Route::post('amazon-url', [AmazonProductController::class, 'url']);
+
 });
