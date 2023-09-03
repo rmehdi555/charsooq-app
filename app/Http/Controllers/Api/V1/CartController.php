@@ -7,6 +7,10 @@ use App\Helpers\Convertors;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cart\CartStoreRequest;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\ExchangeResource;
+use App\Http\Resources\RegionResource;
+use App\Http\Resources\ShopingSiteResource;
+use App\Http\Resources\WeightResource;
 use App\Models\Exchanges;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -26,9 +30,13 @@ class CartController extends Controller
     public function index()
     {
         $regions = Region::all();
+        $regions = RegionResource::collection($regions);
         $exchanges = Exchanges::all();
+        $exchanges = ExchangeResource::collection($exchanges);
         $weight = Weight::all();
+        $weight = WeightResource::collection($weight);
         $shopingSite = ShopingSite::all();
+        $shopingSite = ShopingSiteResource::collection($shopingSite);
         $userAddress = UserAddress::where('user_id', Auth::id())->get();
         $userAddress = AddressResource::collection($userAddress);
         return $this->successResponse([
