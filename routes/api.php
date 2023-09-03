@@ -74,9 +74,12 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
 
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
 
-    Route::get('article-show', [ArticlesController::class, 'index']);
+    Route::get('articles', [ArticlesController::class, 'index']);
     Route::get('article-category', [ArticlesController::class, 'category']);
-    Route::get('category-show/{slug}', [ArticlesController::class, 'categoryshow']);
+    Route::get('category-show/{slug}/{count}', [ArticlesController::class, 'categoryshow']);
+    Route::get('article-show/{slug}', [ArticlesController::class, 'show']);
+    Route::get('article-future/{count}', [ArticlesController::class, 'future']);
+
     Route::post('amazon-url', [AmazonProductController::class, 'url']);
 
 });

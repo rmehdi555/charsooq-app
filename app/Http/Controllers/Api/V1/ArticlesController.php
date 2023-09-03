@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
-    public function index(): JsonResponse
+    public function index($count): JsonResponse
     {
-        $aricles = Article::latest()
-            ->paginate(config('custom.paginate_count'));
-        $data=ArticleindexResource::collection($aricles);
+        $articles = Article::latest()
+            ->paginate($count);
+        $data=ArticleindexResource::collection($articles);
         return $this->successResponse($data, '');
     }
 
@@ -25,11 +25,27 @@ class ArticlesController extends Controller
         return $this->successResponse($category, '');
     }
 
-    public function categoryshow($slug): JsonResponse
+    public function categoryshow($slug,$count): JsonResponse
     {
-        $ariclecategory = ArticleCategory::select('id')->where('slug',$slug)->get();
-        $aricles = Article::where('category_id',$ariclecategory[0]->id)->get();
-        $data=ArticleindexResource::collection($aricles);
+        $articlesCategory = ArticleCategory::select('id')->where('slug',$slug)->get()->paginate($count);
+        $articles = Article::where('category_id',$articlesCategory[0]->id)->get();
+        $data=ArticleindexResource::collection($articles);
         return $this->successResponse($data, '');
     }
+
+    public function show($slug): JsonResponse
+    {
+        $articles = Article::where('slug',$slug)->get();
+        $article = Article::where('slug',$slug)
+            ->update(["view_count" => $articles[0]->view_count+1]);
+        return $this->successResponse($articles, '');
+    }
+
+    public function future($count): JsonResponse
+    {
+        $articles = Article::where('is_future',1)->latest()
+            ->paginate($count);
+        return $this->successResponse($articles, '');
+    }
+
 }

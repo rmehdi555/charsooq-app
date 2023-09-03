@@ -18,6 +18,7 @@ class ArticleCategory extends Model
         'sort',
         'description',
         'file_id',
+
     ];
 
     public function file(): BelongsTo

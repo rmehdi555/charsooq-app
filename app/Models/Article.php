@@ -21,6 +21,8 @@ class Article extends Model
         'created_by',
         'is_show',
         'file_id',
+        'view_count',
+        'is_future'
     ];
 
     public function category(): BelongsTo
