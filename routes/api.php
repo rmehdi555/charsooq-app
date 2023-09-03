@@ -79,6 +79,7 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
     Route::post('category-show', [ArticlesController::class, 'categoryShow']);
     Route::get('article-show/{slug}', [ArticlesController::class, 'show']);
     Route::post('article-future', [ArticlesController::class, 'future']);
+    Route::post('article-mostview', [ArticlesController::class, 'mostview']);
 
     Route::post('amazon-url', [AmazonProductController::class, 'url']);
 

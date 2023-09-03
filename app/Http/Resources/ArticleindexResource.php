@@ -14,19 +14,20 @@ class ArticleindexResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return array(
-            'category' => $this->category->name,
+        return [
+            'category' => ['name' => $this->category->name, 'slug' => $this->category->slug],
             'title' => $this->title,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'body' => $this->body,
             'is_show' => $this->is_show,
-            'file caption' => $this->thumbnail->caption,
-            'file path' => $this->thumbnail->path,
+            'image' => ['path' => $this->thumbnail->path, 'caption' => $this->thumbnail->caption],
             'created_by' => $this->author->name,
-            'seo_title'=>$this->seo->title,
-            'seo_description'=>$this->seo->description,
-            'seo_keyword'=>$this->seo->keyword
-        );
+            'seo' => [
+                'title' => $this->seo->title,
+                'description' => $this->seo->description,
+                'keyword' => $this->seo->keyword
+            ],
+        ];
     }
 }
