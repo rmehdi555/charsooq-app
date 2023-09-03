@@ -24,6 +24,9 @@ class ArticleindexResource extends JsonResource
             'file caption' => $this->thumbnail->caption,
             'file path' => $this->thumbnail->path,
             'created_by' => $this->author->name,
+            'seo_title'=>$this->seo->title,
+            'seo_description'=>$this->seo->description,
+            'seo_keyword'=>$this->seo->keyword
         );
     }
 }
