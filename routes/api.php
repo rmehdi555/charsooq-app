@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AmazonProductController;
+use App\Http\Controllers\Api\V1\ArticlesCatergoryController;
 use App\Http\Controllers\Api\V1\ArticlesController;
 use App\Http\Controllers\Api\V1\CalculatorController;
 use App\Http\Controllers\Api\V1\CartController;
@@ -75,8 +76,8 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
 
     Route::get('articles', [ArticlesController::class, 'index']);
-    Route::get('article-category', [ArticlesController::class, 'category']);
-    Route::post('category-show', [ArticlesController::class, 'categoryShow']);
+    Route::get('article-category', [ArticlesCatergoryController::class, 'index']);
+    Route::post('category-show', [ArticlesCatergoryController::class, 'show']);
     Route::get('article-show/{slug}', [ArticlesController::class, 'show']);
     Route::post('article-future', [ArticlesController::class, 'future']);
     Route::post('article-mostview', [ArticlesController::class, 'mostview']);
