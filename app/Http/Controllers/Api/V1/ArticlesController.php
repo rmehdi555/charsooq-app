@@ -40,7 +40,8 @@ class ArticlesController extends Controller
         $articles = Article::where('slug',$slug)->get();
         $article = Article::where('slug',$slug)
             ->update(["view_count" => $articles[0]->view_count+1]);
-        return $this->successResponse($articles, '');
+        $data=ArticleindexResource::collection($articles);
+        return $this->successResponse($data, '');
     }
 
     public function future(ArticlesIndexRequest $request): JsonResponse
