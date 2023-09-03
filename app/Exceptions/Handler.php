@@ -26,5 +26,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (Throwable $e) {
+            return response()->json([
+                'status' => 404,
+                'errors' => $e->getCode(),
+                'message' => __('messages.not_found'),
+            ], 404);
+        });
     }
 }
