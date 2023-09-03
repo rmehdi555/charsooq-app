@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
-    public function index($count): JsonResponse
+    public function index(): JsonResponse
     {
         $articles = Article::latest()
-            ->paginate($count);
+            ->paginate(config('custom.paginate_count'));
         $data=ArticleindexResource::collection($articles);
         return $this->successResponse($data, '');
     }
