@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->foreignId('created_by')->constrained('users');
             $table->boolean('is_show')->default('1');
             $table->bigInteger('file_id')->nullable();
+            $table->bigInteger('view_count')->default('0');
+            $table->boolean('is_future')->default(false);
             $table->softDeletes();
             $table->timestamps();
 
