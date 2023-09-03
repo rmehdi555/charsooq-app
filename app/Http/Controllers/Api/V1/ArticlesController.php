@@ -37,10 +37,9 @@ class ArticlesController extends Controller
 
     public function show($slug): JsonResponse
     {
-        $articles = Article::where('slug',$slug)->get();
-        $article = Article::where('slug',$slug)
-            ->update(["view_count" => $articles[0]->view_count+1]);
-        $data=ArticleindexResource::collection($articles);
+        $article = Article::whereSlug($slug)->get();
+        $article->increment('view_count');
+        $data=ArticleindexResource::collection($article);
         return $this->successResponse($data, '');
     }
 
