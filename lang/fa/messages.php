@@ -38,5 +38,6 @@ return [
     'email_saved_successfully' => 'ایمیل با موفقیت ثبت شد',
     'profile_update_successfully' => 'پروفایل با موفقیت به روز رسانی شد',
     'register_at_least_one_address' => 'برای ثبت سفارش باید حداقل یک آدرس وارد شده باشد',
-    'not_found' => 'یافت نشد'
+    'not_found' => 'یافت نشد',
+    'item_refresh_success' => 'محصول بروزرسانی شد'
 ];
