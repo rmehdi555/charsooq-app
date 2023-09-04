@@ -56,7 +56,7 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('address-store', [AddressController::class, 'store']);
         Route::put('address-update/{id}', [AddressController::class, 'update']);
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
-        Route::post('cart-index', [CartController::class, 'index']);
+        Route::get('cart-index', [CartController::class, 'index']);
         Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
     });
 

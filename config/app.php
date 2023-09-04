@@ -161,9 +161,7 @@ return [
          */
 
         App\Services\RahyabSms\RahyabServiceProvider::class,
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
-
-
+        MongoDB\Laravel\MongodbServiceProvider::class,
         /*
          * Application Service Providers...
          */
