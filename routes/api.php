@@ -42,45 +42,33 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::post('logout', [UserLoginController::class, 'logout']);
         Route::get('profile', [ProfileController::class, 'profile']);
         Route::put('profile-update', [ProfileController::class, 'update']);
-
         Route::post('payment-index', [PaymentController::class, 'index']);
-
-        Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
-
         Route::post('ticket-index', [TicketController::class, 'index']);
         Route::get('ticket-create', [TicketController::class, 'create']);
         Route::post('ticket-store', [TicketController::class, 'store']);
         Route::post('ticket-reply', [TicketController::class, 'reply']);
         Route::get('ticket-show/{code}', [TicketController::class, 'show']);
-
         Route::post('invoice-index', [InvoiceController::class, 'index']);
         Route::post('invoice-show/{code}', [InvoiceController::class, 'show']);
-
-        Route::get('calculator-index', [CalculatorController::class, 'index']);
-        Route::post('calculator-show', [CalculatorController::class, 'show']);
-
-        Route::post('cart-index', [CartController::class, 'index']);
-        Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
-
         Route::post('wallet-charge', [WalletController::class, 'walletCharge']);
-
         Route::get('address-index', [AddressController::class, 'index']);
         Route::post('address-store', [AddressController::class, 'store']);
         Route::put('address-update/{id}', [AddressController::class, 'update']);
-
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
-
+        Route::post('cart-index', [CartController::class, 'index']);
+        Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
     });
 
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
-
     Route::get('articles', [ArticlesController::class, 'index']);
     Route::get('article-category', [ArticlesController::class, 'category']);
     Route::post('category-show', [ArticlesController::class, 'categoryShow']);
     Route::get('article-show/{slug}', [ArticlesController::class, 'show']);
     Route::post('article-future', [ArticlesController::class, 'future']);
     Route::post('article-mostview', [ArticlesController::class, 'mostview']);
-
     Route::post('amazon-url', [AmazonProductController::class, 'url']);
+    Route::get('calculator-index', [CalculatorController::class, 'index']);
+    Route::post('calculator-show', [CalculatorController::class, 'show']);
+    Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
 
 });
