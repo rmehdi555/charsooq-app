@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Wallet\WalletChargeRequest;
+use App\Http\Resources\CreditResource;
 use App\Models\Credit;
 use App\Models\User;
 use App\Services\Payment\Invoice;
@@ -15,6 +16,21 @@ use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+
+        $user = Auth::user();
+        $paginateCount = isset($request->paginate_count) ? $request->paginate_count : config('custom.paginate_count');
+        $credits = Credit::where('user_id', $user->id)->latest()
+            ->paginate($paginateCount);
+        $credits = CreditResource::collection($credits);
+
+        return $this->successResponse([
+            'wallet_balance' => $user->wallet_balance,
+            'credits' => $credits
+        ]);
+    }
+
     public function walletCharge(WalletChargeRequest $request): JsonResponse
     {
         $payment = new Payment(config('payment'));
@@ -41,14 +57,14 @@ class WalletController extends Controller
     public function callbackZarinpal(Request $request): JsonResponse
     {
         $map = config('custom.map_wallets_payment');
-        $walletId = array_search('zarinpal', $map);
-        if (!$walletId)
-            return $this->errorResponse('dont find config\custom.map_wallets_payment for zarinpal');
+        if (!isset($map[config('custom.map_wallets_payment_default')]))
+            return $this->errorResponse('dont find config\custom.map_wallets_payment for zarinpalWallet');
 
-        $credit = Credit::where('bank_transaction_id', $request->input('Authority'))->first();
+        $credit = Credit::where('bank_transaction_id', $request->input('Authority'))
+            ->where('payment_status', 'Preinitiated')->first();
 
         if (!isset($credit) or empty($credit))
-            return $this->errorResponse(__('messages.field_not_find'));
+            return $this->errorResponse(__('messages.field_not_find'), 404);
 
         $payment = new Payment(config('payment'));
         try {

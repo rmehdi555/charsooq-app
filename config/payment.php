@@ -10,7 +10,7 @@ return [
     | You can switch to a different driver at runtime.
     |
     */
-    'default' => 'zarinpal',
+    'default' => 'zarinpalWallet',
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ return [
     |
     */
     'drivers' => [
-        'zarinpal' => [
+        'zarinpalWallet' => [
             /* normal api */
             'apiPurchaseUrl' => 'https://api.zarinpal.com/pg/v4/payment/request.json',
             'apiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/',
@@ -44,6 +44,27 @@ return [
             'callbackUrl' => config('app.url').'/api/v1/wallet-charge-callback-zarinpal',
             'description' => 'payment using zarinpal',
         ],
+        'zarinpalInvoice' => [
+            /* normal api */
+            'apiPurchaseUrl' => 'https://api.zarinpal.com/pg/v4/payment/request.json',
+            'apiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/',
+            'apiVerificationUrl' => 'https://api.zarinpal.com/pg/v4/payment/verify.json',
+
+            /* sandbox api */
+            'sandboxApiPurchaseUrl' => 'https://sandbox.zarinpal.com/pg/services/WebGate/wsdl',
+            'sandboxApiPaymentUrl' => 'https://sandbox.zarinpal.com/pg/StartPay/',
+            'sandboxApiVerificationUrl' => 'https://sandbox.zarinpal.com/pg/services/WebGate/wsdl',
+
+            /* zarinGate api */
+            'zaringateApiPurchaseUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
+            'zaringateApiPaymentUrl' => 'https://www.zarinpal.com/pg/StartPay/:authority/ZarinGate',
+            'zaringateApiVerificationUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
+
+            'mode' => 'normal', // can be normal, sandbox, zaringate
+            'merchantId' => 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+            'callbackUrl' => config('app.url').'/api/v1/invoice-callback-zarinpal',
+            'description' => 'payment using zarinpal',
+        ],
     ],
 
     /*
@@ -59,6 +80,7 @@ return [
     |
     */
     'map' => [
-        'zarinpal' => \App\Services\Payment\Drivers\Zarinpal\Zarinpal::class,
+        'zarinpalWallet' => \App\Services\Payment\Drivers\Zarinpal\Zarinpal::class,
+        'zarinpalInvoice' => \App\Services\Payment\Drivers\Zarinpal\Zarinpal::class,
     ]
 ];
