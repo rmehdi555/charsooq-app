@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,16 +24,12 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (ThrottleRequestsException $e) {
+            return response()->json([
+                'status' => 404,
+                'errors' => $e->getCode(),
+                'message' => __('messages.there_were_too_many_requests_Please_try_again_in_a_few_moments'),
+            ], 404);
         });
-
-//        $this->renderable(function (Throwable $e) {
-//            return response()->json([
-//                'status' => 404,
-//                'errors' => $e->getCode(),
-//                'message' => __('messages.not_found'),
-//            ], 404);
-//        });
     }
 }
