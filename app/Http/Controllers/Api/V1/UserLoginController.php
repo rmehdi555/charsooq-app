@@ -24,7 +24,9 @@ class UserLoginController extends Controller
         $user->notify(new SendOtpCodeNotification($otp));
 
         return $this->successResponse([
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            //TODO remove $otp
+            'otp' => $otp
         ]);
     }
 

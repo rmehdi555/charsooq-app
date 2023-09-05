@@ -23,7 +23,7 @@ class CartStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cart' => 'required|array',
+            'cart' => 'required|array|max:5',
             'cart.*.link' => 'required|string',
             'cart.*.name' => 'required|string',
             'cart.*.cost' => 'required|string',

@@ -28,6 +28,7 @@ class CalculatorRequest extends FormRequest
             'exchange_id' => 'required|integer|exists:exchanges,id',
             'region_id' => 'required|integer|exists:regions,id',
             'weight' => 'required|integer',
+            'count' => 'required|integer',
         ];
     }
 }

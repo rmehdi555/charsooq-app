@@ -98,7 +98,6 @@ class Payment
         }
 
         $this->settings = array_merge($this->settings, $configs);
-
         return $this;
     }
 
@@ -303,7 +302,6 @@ class Payment
     protected function invoice(Invoice $invoice)
     {
         $this->invoice = $invoice;
-
         return $this;
     }
 

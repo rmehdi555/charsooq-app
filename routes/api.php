@@ -51,25 +51,30 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('ticket-show/{code}', [TicketController::class, 'show']);
         Route::post('invoice-index', [InvoiceController::class, 'index']);
         Route::post('invoice-show/{code}', [InvoiceController::class, 'show']);
+        Route::post('invoice-wallet-payment/{code}', [InvoiceController::class, 'walletPayment']);
+        Route::post('invoice-online-payment/{code}', [InvoiceController::class, 'onlinePayment']);
+        Route::post('wallet-index', [WalletController::class, 'index']);
         Route::post('wallet-charge', [WalletController::class, 'walletCharge']);
         Route::get('address-index', [AddressController::class, 'index']);
         Route::post('address-store', [AddressController::class, 'store']);
         Route::put('address-update/{id}', [AddressController::class, 'update']);
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
-        Route::post('cart-index', [CartController::class, 'index']);
+        Route::get('cart-index', [CartController::class, 'index']);
         Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
     });
 
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
+    Route::get('invoice-callback-zarinpal', [InvoiceController::class, 'callbackZarinpal']);
     Route::get('articles', [ArticlesController::class, 'index']);
     Route::get('article-category', [ArticlesCatergoryController::class, 'index']);
     Route::post('category-show', [ArticlesCatergoryController::class, 'show']);
     Route::get('article-show/{slug}', [ArticlesController::class, 'show']);
     Route::post('article-future', [ArticlesController::class, 'future']);
-    Route::post('article-mostview', [ArticlesController::class, 'mostview']);
+    Route::post('article-most-view', [ArticlesController::class, 'mostView']);
     Route::post('amazon-url', [AmazonProductController::class, 'url']);
     Route::get('calculator-index', [CalculatorController::class, 'index']);
     Route::post('calculator-show', [CalculatorController::class, 'show']);
     Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
+    Route::get('product-refresh/{slug}', [ProductController::class, 'refresh'])->middleware('throttle:60,1');
 
 });

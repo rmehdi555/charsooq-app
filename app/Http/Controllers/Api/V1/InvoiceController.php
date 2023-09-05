@@ -7,9 +7,12 @@ use App\Http\Requests\V1\Invoice\InvoiceIndexRequest;
 use App\Http\Resources\InvoiceItemResource;
 use App\Http\Resources\InvoiceOthercostResource;
 use App\Http\Resources\TransactionResource;
+use App\Models\Credit;
 use App\Models\Invoice;
 use App\Models\InvoicesOthercosts;
 use App\Models\Transaction;
+use App\Services\Payment\Payment;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +50,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('code', $code)->first();
         if (!filled($invoice) or $invoice->user_id != Auth::id())
             return $this->errorResponse(__('messages.item_not_found'), 404);
+        $user = Auth::user();
         $data = [];
         $data['code'] = $code;
         $data['invoice_status'] = $invoice->status;
@@ -90,10 +94,68 @@ class InvoiceController extends Controller
                 $data['price_for_pay'] = (int)$data['total_price'] - (int)$data['sum_pay'];
                 $data['is_pay'] = false;
                 break;
-
         }
 
+        $data['user'] = [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'cell_number' => $user->cell_number,
+            'national_code' => $user->national_code,
+            'wallet_balance' => $user->wallet_balance,
+        ];
 
         return $this->successResponse($data, '');
+    }
+
+    public function onlinePayment($code): JsonResponse
+    {
+        $invoice = Invoice::where('code', $code)->first();
+        if (!filled($invoice) or $invoice->user_id != Auth::id())
+            return $this->errorResponse(__('messages.item_not_found'), 404);
+        $sum_pay = Transaction::where('invoice_id', $invoice->id)->sum('amount');
+        $othercost = InvoicesOthercosts::where('invoice_id', $invoice->id)->sum('OtherCostPrice');
+
+        switch ($invoice->orderlevel) {
+            case 'فاکتور':
+                $price_for_pay = (int)$invoice->totalitemprice + (int)$invoice->totaltransportprice + (int)$othercost - (int)$sum_pay;
+                $method = 'پرداخت اولیه';
+                break;
+            case 'آماده برای پرداخت':
+                $price_for_pay = (int)$invoice->finalTotalitemprice + (int)$invoice->finalTotaltransportprice + (int)$othercost - (int)$sum_pay;
+                break;
+
+            default:
+                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 404);
+        }
+        $payment = new Payment(config('payment'));
+        $transaction= Transaction::create([
+            'method' => $method,
+            'amount' => $price_for_pay,
+            'issuccess' => 0,
+            'payment_method_id' => 1,
+            'user_id' => Auth::id(),
+            'invoice_id' => $invoice->id,
+            'status' => 1,
+        ]);
+        try {
+            $result = $payment->via(config('custom.map_wallets_payment')[config('custom.map_invoice_payment_default')])->purchase(
+                (new \App\Services\Payment\Invoice)->amount($transaction->amount),
+                function ($driver, $bankTransactionId) use ($transaction) {
+                    $transaction->transId = $bankTransactionId;
+                    $transaction->save();
+                }
+            )->pay()->getAction();
+            return $this->successResponse($result);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    public function walletPayment($code): JsonResponse
+    {
+        $invoice = Invoice::where('code', $code)->first();
+        if (!filled($invoice) or $invoice->user_id != Auth::id())
+            return $this->errorResponse(__('messages.item_not_found'), 404);
     }
 }

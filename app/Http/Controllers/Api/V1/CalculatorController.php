@@ -36,7 +36,8 @@ class CalculatorController extends Controller
             $request->weight_unit,
             $request->exchange_id,
             $request->region_id,
-            $request->weight
+            $request->weight,
+            $request->count
         );
         return $this->successResponse([
             'priceRial' => $priceRial,

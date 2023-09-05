@@ -39,7 +39,7 @@ class ArticlesController extends Controller
         return $this->successResponse($articles, '');
     }
 
-    public function mostview(ArticlesIndexRequest $request): JsonResponse
+    public function mostView(ArticlesIndexRequest $request): JsonResponse
     {
         $articles = Article::orderBy('view_count')->with(['category', 'thumbnail', 'seo', 'tags', 'author'])
             ->paginate($request->count);
