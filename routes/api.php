@@ -61,6 +61,7 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
         Route::get('dashboard-index', [DashbboardController::class, 'index']);
         Route::get('cart-index', [CartController::class, 'index']);
         Route::post('cart-store', [CartController::class, 'store'])->middleware(UserRegisterComplete::class);
+        Route::get('product-refresh/{slug}', [ProductController::class, 'refresh'])->middleware('throttle:60,1');
     });
 
     Route::get('wallet-charge-callback-zarinpal', [WalletController::class, 'callbackZarinpal']);
@@ -75,6 +76,5 @@ Route::prefix('v1/')->namespace('api/v1/')->group(function () {
     Route::get('calculator-index', [CalculatorController::class, 'index']);
     Route::post('calculator-show', [CalculatorController::class, 'show']);
     Route::get('product-show/{asin}', [ProductController::class, 'show'])->name('product-show');
-    Route::get('product-refresh/{slug}', [ProductController::class, 'refresh'])->middleware('throttle:1,1');
 
 });

@@ -41,5 +41,7 @@ return [
     'not_found' => 'یافت نشد',
     'item_refresh_success' => 'محصول بروزرسانی شد',
     'invoice_does_not_require_payment' => 'این سفارش نیاز به پرداخت ندارد',
-    'there_were_too_many_requests_Please_try_again_in_a_few_moments' => 'تعداد درخواست ها زیاد بود چند لحظه دیگر مجدد تلاش کنید'
+    'there_were_too_many_requests_Please_try_again_in_a_few_moments' => 'تعداد درخواست ها زیاد بود چند لحظه دیگر مجدد تلاش کنید',
+    'success_payment' => 'پرداخت با موفقیت انجام شد',
+    'wallet_balance_not_enough' => 'موجودی کیف پول کافی نمیباشد'
 ];

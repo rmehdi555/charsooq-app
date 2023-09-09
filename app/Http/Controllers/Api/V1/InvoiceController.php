@@ -11,7 +11,9 @@ use App\Models\Credit;
 use App\Models\Invoice;
 use App\Models\InvoicesOthercosts;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Services\Payment\Payment;
+use App\Services\Payment\Request;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -123,13 +125,17 @@ class InvoiceController extends Controller
                 break;
             case 'آماده برای پرداخت':
                 $price_for_pay = (int)$invoice->finalTotalitemprice + (int)$invoice->finalTotaltransportprice + (int)$othercost - (int)$sum_pay;
+                $method = 'پرداخت ثانویه';
                 break;
 
             default:
-                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 404);
+                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+        }
+        if ($price_for_pay <= 0) {
+            return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
         }
         $payment = new Payment(config('payment'));
-        $transaction= Transaction::create([
+        $transaction = Transaction::create([
             'method' => $method,
             'amount' => $price_for_pay,
             'issuccess' => 0,
@@ -152,10 +158,89 @@ class InvoiceController extends Controller
         }
     }
 
+
+    public function callbackZarinpal(Request $request): JsonResponse
+    {
+        $map = config('custom.map_wallets_payment');
+        if (!isset($map[config('custom.map_invoice_payment_default')]))
+            return $this->errorResponse('dont find config\custom.map_wallets_payment for zarinpalWallet');
+
+        $transaction = Transaction::where('transId', $request->input('Authority'))
+            ->where('status', 1)->first();
+
+        if (!isset($transaction) or empty($transaction))
+            return $this->errorResponse(__('messages.field_not_find'), 404);
+
+        $payment = new Payment(config('payment'));
+        try {
+            $receipt = $payment->via(config('custom.map_wallets_payment')[config('custom.map_invoice_payment_default')])
+                ->amount($transaction->amount)
+                ->transactionId($transaction->transId)
+                ->verify();
+            $transaction->refnumber = $receipt->getReferenceId();
+            $transaction->issuccess = 1;
+            $transaction->status = 2;
+            $transaction->save();
+        } catch (Exception $e) {
+            $transaction->status = 3;
+            $transaction->save();
+            return $this->errorResponse(__('messages.field_deposit_payment'));
+        }
+        return $this->successResponse(__('messages.success_payment'));
+    }
+
     public function walletPayment($code): JsonResponse
     {
         $invoice = Invoice::where('code', $code)->first();
         if (!filled($invoice) or $invoice->user_id != Auth::id())
             return $this->errorResponse(__('messages.item_not_found'), 404);
+        $sum_pay = Transaction::where('invoice_id', $invoice->id)->sum('amount');
+        $othercost = InvoicesOthercosts::where('invoice_id', $invoice->id)->sum('OtherCostPrice');
+
+        switch ($invoice->orderlevel) {
+            case 'فاکتور':
+                $price_for_pay = (int)$invoice->totalitemprice + (int)$invoice->totaltransportprice + (int)$othercost - (int)$sum_pay;
+                $method = 'پرداخت اولیه';
+                break;
+            case 'آماده برای پرداخت':
+                $price_for_pay = (int)$invoice->finalTotalitemprice + (int)$invoice->finalTotaltransportprice + (int)$othercost - (int)$sum_pay;
+                $method = 'پرداخت ثانویه';
+                break;
+
+            default:
+                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+        }
+        if ($price_for_pay <= 0)
+            return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+
+        $user = Auth::user();
+        $user->wallet_balance = Credit::where('user_id', $user->id)->where('payment_status', 'Succeeded')->sum('amount');
+        $user->save();
+        if ($user->wallet_balance < $price_for_pay)
+            return $this->errorResponse(__('messages.wallet_balance_not_enough'), 401);
+
+        try {
+            $credit = Credit::create([
+                'amount' => -$price_for_pay,
+                'payment_status' => 'Succeeded',
+                'status' => 'discharge',
+                'user_id' => Auth::id(),
+                'invoice_id' => $invoice->id,
+            ]);
+            $transaction = Transaction::create([
+                'method' => $method,
+                'amount' => $price_for_pay,
+                'issuccess' => 1,
+                'payment_method_id' => 6,
+                'user_id' => Auth::id(),
+                'invoice_id' => $invoice->id,
+                'status' => 2,
+            ]);
+            $user->wallet_balance = Credit::where('user_id', $user->id)->where('payment_status', 'Succeeded')->sum('amount');
+            $user->save();
+            return $this->successResponse(__('messages.success_payment'));
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
     }
 }

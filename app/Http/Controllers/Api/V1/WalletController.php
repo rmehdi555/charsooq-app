@@ -83,6 +83,6 @@ class WalletController extends Controller
             $credit->save();
             return $this->errorResponse(__('messages.field_deposit_payment'));
         }
-        return $this->successResponse($credit);
+        return $this->successResponse(__('messages.success_payment'));
     }
 }
