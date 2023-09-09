@@ -32,6 +32,7 @@ return [
     ],
 
     'rahyab_sms' => [
+        'server' => env('RAHYAB_SMS_SERVER', 'https://sms.igama.ir/webservice/sms.asmx?wsdl'),
         'username' => env('RAHYAB_SMS_USERNAME'),
         'password' => env('RAHYAB_SMS_PASSWORD'),
         'shortcode' => env('RAHYAB_SMS_SHORTCODE'),

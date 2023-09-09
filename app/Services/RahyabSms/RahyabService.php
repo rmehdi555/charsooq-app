@@ -21,12 +21,10 @@ class RahyabService
         if (!extension_loaded('soap'))
             throw new RahyabSmsException("Soap extension not loaded");
 
-        $this->baseUrl = 'https://sms.igama.ir/webservice/sms.asmx?wsdl';
+        $this->baseUrl = config('services.rahyab_sms.server');
         $this->username = config('services.rahyab_sms.username');
         $this->password = config('services.rahyab_sms.password');
         $this->shortcode = config('services.rahyab_sms.shortcode');
-
-
 
 
         if (is_null($this->username) || is_null($this->password))
@@ -54,7 +52,7 @@ class RahyabService
      * @return string, return status
      */
     public function send($number, $message, $recId = null)
-    {       
+    {
         try {
             $client = new SoapClient($this->baseUrl, $this->option);
             $parameters = [
