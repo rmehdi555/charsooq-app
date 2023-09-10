@@ -25,8 +25,6 @@ class UserLoginController extends Controller
 
         return $this->successResponse([
             'user_id' => $user->id,
-            //TODO remove $otp
-            'otp' => $otp
         ]);
     }
 

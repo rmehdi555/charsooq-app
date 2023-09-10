@@ -20,9 +20,10 @@ class ProfileController extends Controller
             'email' => $user->email,
             'cell_number' => $user->cell_number,
             'national_code' => $user->national_code,
-            'wallet_balance' => $user->wallet_balance,
+            'wallet_balance' => (int)$user->wallet_balance,
         ], '');
     }
+
     public function update(UpdateProfileRequest $request): JsonResponse
     {
         $user = User::where('id', Auth::id())->first();

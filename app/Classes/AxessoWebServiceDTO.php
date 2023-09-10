@@ -72,12 +72,11 @@ class AxessoWebServiceDTO
             elseif (isset($result['retailPrice']))
                 $result['price'] = $result['retailPrice'];
         }
-
         foreach ($result['reviews'] as $key => $item) {
-            if (strlen($item['text']) > 800)
-                unset($result['reviews'][$key]);
+            if (strlen($item['text']) < 800)
+                $reviews[] = $item;
         }
-
+        $result['reviews'] = $reviews ?? [];
         return $result;
     }
 
