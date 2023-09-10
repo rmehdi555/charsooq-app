@@ -8,10 +8,10 @@ use App\Http\Resources\InvoiceItemResource;
 use App\Http\Resources\InvoiceOthercostResource;
 use App\Http\Resources\TransactionResource;
 use App\Models\Credit;
+use App\Models\ExchangeInvoice;
 use App\Models\Invoice;
 use App\Models\InvoicesOthercosts;
 use App\Models\Transaction;
-use App\Models\User;
 use App\Services\Payment\Payment;
 use App\Services\Payment\Request;
 use Exception;
@@ -129,10 +129,10 @@ class InvoiceController extends Controller
                 break;
 
             default:
-                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+                return $this->errorResponse(__('messages.invoice_does_not_require_payment'));
         }
         if ($price_for_pay <= 0) {
-            return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+            return $this->errorResponse(__('messages.invoice_does_not_require_payment'));
         }
         $payment = new Payment(config('payment'));
         $transaction = Transaction::create([
@@ -158,7 +158,6 @@ class InvoiceController extends Controller
         }
     }
 
-
     public function callbackZarinpal(Request $request): JsonResponse
     {
         $map = config('custom.map_wallets_payment');
@@ -172,6 +171,7 @@ class InvoiceController extends Controller
             return $this->errorResponse(__('messages.field_not_find'), 404);
 
         $payment = new Payment(config('payment'));
+        DB::beginTransaction();
         try {
             $receipt = $payment->via(config('custom.map_wallets_payment')[config('custom.map_invoice_payment_default')])
                 ->amount($transaction->amount)
@@ -181,12 +181,19 @@ class InvoiceController extends Controller
             $transaction->issuccess = 1;
             $transaction->status = 2;
             $transaction->save();
+            ExchangeInvoice::storeAllExchangeValueForInvoice($transaction->invoice_id);
+
+            Invoice::where('id', $transaction->invoice_id)->update([
+                'orderlevel' => 'سفارش',
+                'status' => 'در حال خرید'
+            ]);
+            DB::commit();
         } catch (Exception $e) {
             $transaction->status = 3;
             $transaction->save();
             return $this->errorResponse(__('messages.field_deposit_payment'));
         }
-        return $this->successResponse(__('messages.success_payment'));
+        return $this->successResponse($transaction, __('messages.success_payment'));
     }
 
     public function walletPayment($code): JsonResponse
@@ -208,17 +215,17 @@ class InvoiceController extends Controller
                 break;
 
             default:
-                return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+                return $this->errorResponse(__('messages.invoice_does_not_require_payment'),);
         }
         if ($price_for_pay <= 0)
-            return $this->errorResponse(__('messages.invoice_does_not_require_payment'), 401);
+            return $this->errorResponse(__('messages.invoice_does_not_require_payment'));
 
         $user = Auth::user();
         $user->wallet_balance = Credit::where('user_id', $user->id)->where('payment_status', 'Succeeded')->sum('amount');
         $user->save();
         if ($user->wallet_balance < $price_for_pay)
-            return $this->errorResponse(__('messages.wallet_balance_not_enough'), 401);
-
+            return $this->errorResponse(__('messages.wallet_balance_not_enough'));
+        DB::beginTransaction();
         try {
             $credit = Credit::create([
                 'amount' => -$price_for_pay,
@@ -238,7 +245,14 @@ class InvoiceController extends Controller
             ]);
             $user->wallet_balance = Credit::where('user_id', $user->id)->where('payment_status', 'Succeeded')->sum('amount');
             $user->save();
-            return $this->successResponse(__('messages.success_payment'));
+            ExchangeInvoice::storeAllExchangeValueForInvoice($transaction->invoice_id);
+
+            Invoice::where('id', $transaction->invoice_id)->update([
+                'orderlevel' => 'سفارش',
+                'status' => 'در حال خرید'
+            ]);
+            DB::commit();
+            return $this->successResponse($transaction, __('messages.success_payment'));
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage());
         }
