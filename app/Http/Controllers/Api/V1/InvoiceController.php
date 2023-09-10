@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\Convertors;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Invoice\InvoiceIndexRequest;
 use App\Http\Resources\InvoiceItemResource;
@@ -23,8 +24,7 @@ class InvoiceController extends Controller
 {
     public function index(InvoiceIndexRequest $request): JsonResponse
     {
-
-        $invoice = Invoice::select('invoices.code', 'invoices.status', 'invoices.invoicedate', DB::raw('SUM(invoice_items.count) as sum_count'))
+        $invoice = Invoice::select('invoices.code', 'invoices.status', 'invoices.orderlevel', 'invoices.invoicedate', DB::raw('SUM(invoice_items.count) as sum_count'))
             ->where('user_id', Auth::id())
             ->leftjoin('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->when(
@@ -42,9 +42,12 @@ class InvoiceController extends Controller
             ->groupBy('invoices.code')
             ->orderBy('invoices.created_at', 'desc')
             ->paginate(config('custom.paginate_count'));
-        $order_level = ['درخواست', 'فاکتور', 'سفارش', 'تسویه', 'ارسال', 'تحویل', 'نامشخص', 'آماده برای پرداخت', 'پرداخت شده', 'ارسال به مشتری', 'تحویل مشتری'];
-        $invoice->put('orderlevel', $order_level);
-        return $this->successResponse($invoice, '');
+        $data=Convertors::invoiceCaseUser($invoice);
+        dd($data);
+
+        $status_order_level = ['در حال بررسی', 'پیش فاکتور در انتظار پرداخت', 'در حال خرید', 'ارسال به ایران', 'فاکتور نهایی در انتظار پرداخت', 'در حال ارسال به مشتری', 'نامشخص', 'تحویل مشتری'];
+        $data->put('$status_order_level', $status_order_level);
+        return $this->successResponse($data, '');
     }
 
     public function show($code): JsonResponse
