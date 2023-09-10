@@ -26,7 +26,7 @@ class WalletController extends Controller
         $credits = CreditResource::collection($credits);
 
         return $this->successResponse([
-            'wallet_balance' => $user->wallet_balance,
+            'wallet_balance' => (int)$user->wallet_balance,
             'credits' => $credits
         ]);
     }
