@@ -37,7 +37,8 @@
         "files": [
             "app/Helpers/GeneralHelper.php",
             "app/Helpers/PersianToolsHelper.php",
-            "app/Helpers/Convertors.php"
+            "app/Helpers/Convertors.php",
+            "app/Helpers/MapingHelper.php"
         ]
     },
     "scripts": {

@@ -48,7 +48,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function store(CartStoreRequest $request): JsonResponse
+    public function store(CartStoreRequest $request)//: JsonResponse
     {
         $code = InvoiceCode::generateCode();
         $invoices_data = [
@@ -59,12 +59,10 @@ class CartController extends Controller
             'totaltransportprice' => 0,
             'totalitemprice' => 0,
             'invoicingprice' => 0,
-            'new' => 1,
             'isonesteppayment' => 0,
             'user_id' => Auth::id(),
             'address_id' => $request->address_id,
             'description' => $request->description ?? '',
-            'isFromCharsooq' => 1,
             'lastmodifydate' => Carbon::now(),
             'invoicedate' => Carbon::today()->toDateString(),
         ];
@@ -89,7 +87,6 @@ class CartController extends Controller
                     'exchangevalue' => 0,
                     'brokerwageprice' => 0,
                     'singleitemfullprice' => $cart_item['singleitemfullprice'],
-                    'apistatus' => 0,
                     'invoice_id' => $invoice->id,
                     'exchange_id' => $cart_item['exchange_id'],
                     'description' => $cart_item['description'],
@@ -114,4 +111,5 @@ class CartController extends Controller
 
 
     }
+
 }
